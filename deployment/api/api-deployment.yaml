@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-orders
+  labels:
+    app: api-orders
+spec:
+  template:
+    metadata:
+      name: api-orders
+      labels:
+        app: api-orders
+    spec:
+      containers:
+        - name: api-orders-container
+          image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/lanchonete-55/api-orders:main
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          env: 
+            - name: CUSTOMERS_API_URL
+              value: http://api-entity-service:3000
+            - name: PAYMENT_API_URL
+              value: http://api-payment-service:3000
+            - name: PRODUCTS_API_URL
+              value: http://api-entity-service:3000
+
+          envFrom:
+            - secretRef:
+                name: api-orders-secrets
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-orders

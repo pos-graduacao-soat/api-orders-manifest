@@ -11,6 +11,13 @@ spec:
       labels:
         app: api-orders
     spec:
+      initContainers:
+      - name: migration-container
+        image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/lanchonete-55/api-orders:main
+        command: ["npm", "run", "update-migrations"]
+        envFrom:
+            - secretRef:
+                name: api-orders-secrets
       containers:
         - name: api-orders-container
           image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/lanchonete-55/api-orders:main
@@ -27,7 +34,6 @@ spec:
               value: http://api-payment-service:3000
             - name: PRODUCTS_API_URL
               value: http://api-entity-service:3000
-
           envFrom:
             - secretRef:
                 name: api-orders-secrets

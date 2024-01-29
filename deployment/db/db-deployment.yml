@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-orders
+  labels:
+    app: db-orders
+spec:
+  template:
+    metadata:
+      name: db-orders
+      labels:
+        app: db-orders
+    spec:
+      containers:
+        - name: db-orders-container
+          image: mysql:8.0.20
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql-8.0.20
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          envFrom:
+            - secretRef:
+                name: db-orders-secrets
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: pvc-db-orders
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-orders

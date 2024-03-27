@@ -13,14 +13,14 @@ spec:
     spec:
       initContainers:
       - name: migration-container
-        image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/lanchonete-55/api-orders:main
+        image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/hackaton/api-orders:main
         command: ["npm", "run", "update-migrations"]
         envFrom:
             - secretRef:
                 name: api-orders-secrets
       containers:
         - name: api-orders-container
-          image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/lanchonete-55/api-orders:main
+          image: 572978752108.dkr.ecr.us-east-1.amazonaws.com/hackaton/api-orders:main
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
